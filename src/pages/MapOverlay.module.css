@@ -1,0 +1,151 @@
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10; /* 지도 위에 고정 */
+  pointer-events: none; /* 지도 상호작용 우선 */
+}
+
+/* 상단 우측 로그인 버튼 래퍼 */
+.loginWrap {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  pointer-events: auto;
+}
+
+.loginBtn {
+  appearance: none;
+  border: 0;
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  font-size: 14px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.topBar {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 12px;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.searchBox {
+  flex: 1;
+  display: flex;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+.searchInput {
+  flex: 1;
+  border: 0;
+  outline: none;
+  padding: 12px 14px;
+  font-size: 14px;
+}
+.searchBtn {
+  border: 0;
+  background: #ff5b5b;
+  color: #fff;
+  padding: 0 14px;
+  font-weight: 700;
+}
+
+.leftPanel {
+  position: absolute;
+  top: 68px;
+  left: 16px;
+  width: 320px;
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 84px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+.cardHeader {
+  padding: 10px 12px;
+  font-weight: 700;
+  border-bottom: 1px solid #eee;
+}
+.cardBody {
+  padding: 12px;
+}
+
+.rightTools {
+  position: absolute;
+  top: 68px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+.toolBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bottomCta {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  pointer-events: auto;
+}
+.ctaBtn {
+  background: #2b64f6;
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 700;
+  box-shadow: 0 10px 28px rgba(43, 100, 246, 0.4);
+}
+
+@media (max-width: 992px) {
+  .leftPanel {
+    width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .leftPanel {
+    display: none;
+  }
+}
+
+/* 현재 위치 버튼 로딩 애니메이션 */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

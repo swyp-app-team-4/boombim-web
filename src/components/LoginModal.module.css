@@ -1,0 +1,127 @@
+.modal {
+  /* Modal의 className */
+}
+
+.modalDialog {
+  /* Modal의 dialogClassName */
+  max-width: 420px;
+}
+
+.modalContent {
+  /* Modal의 contentClassName */
+  border: none;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 2;
+  background: transparent;
+  border: 0;
+  font-size: 28px;
+  line-height: 1;
+  color: #222;
+  cursor: pointer;
+}
+
+.body {
+  padding: 28px 24px 32px;
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  line-height: 1.25;
+  font-weight: 800;
+  margin: 4px 0 18px;
+  letter-spacing: -0.02em;
+}
+.highlight {
+  color: #f5a623;
+}
+
+.image {
+  margin: 8px auto 16px;
+}
+.image img {
+  width: 90%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* 꼬다리 포함 */
+.badge {
+  position: relative;
+  display: inline-block;
+  background: #111;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin: 8px 0 18px;
+}
+.badge::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -6px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 6px 0 6px;
+  border-color: #111 transparent transparent transparent;
+}
+
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.02s ease-in;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.kakao {
+  background: #fee500;
+  color: #000;
+}
+.kakao .icon {
+  background: transparent;
+  border-radius: 0;
+}
+
+.naver {
+  background: #03c75a;
+  color: #fff;
+}
+.naver .icon {
+  background: transparent;
+  border-radius: 0;
+  min-width: 18px;
+  min-height: 18px;
+  display: block !important;
+  visibility: visible !important;
+}
