@@ -4,6 +4,10 @@ import LoginModal from "../components/LoginModal";
 import { AuthContext } from "../contexts/AuthContext";
 import UserAvatar from "../components/UserAvatar";
 import api from "../lib/axios";
+import congestionLow from "../assets/markers/congestion-low.png";
+import congestionNormal from "../assets/markers/congestion-normal.png";
+import congestionCrowded from "../assets/markers/congestion-crowded.png";
+import congestionVeryCrowded from "../assets/markers/congestion-very-crowded.png";
 
 type PlaceFilter = "official" | "member" | "both";
 
@@ -151,10 +155,10 @@ export default function Map() {
 
       const getMarkerImage = (congestionLevel: string) => {
         const levelMap: { [key: string]: string } = {
-          여유: "/src/assets/markers/congestion-low.png",
-          보통: "/src/assets/markers/congestion-normal.png",
-          "약간 붐빔": "/src/assets/markers/congestion-crowded.png",
-          붐빔: "/src/assets/markers/congestion-very-crowded.png",
+          여유: congestionLow,
+          보통: congestionNormal,
+          "약간 붐빔": congestionCrowded,
+          붐빔: congestionVeryCrowded,
         };
         return levelMap[congestionLevel] || levelMap["보통"];
       };
