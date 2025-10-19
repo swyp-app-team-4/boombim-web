@@ -25,7 +25,7 @@ jobs:
       - name: Create .env.production
         run: |
           cat > .env.production << 'EOF'
-          VITE_KAKAO_JS_KEY=${{ secrets.KAKAO_JS_KEY }}
+          VITE_KAKAO_APP_KEY=${{ secrets.KAKAO_JS_KEY }}
           EOF
 
       - name: Build
