@@ -1,5 +1,4 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Map from "./pages/Map";
 import "./App.css";

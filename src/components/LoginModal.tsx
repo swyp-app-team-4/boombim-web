@@ -11,7 +11,7 @@ type Props = { show: boolean; onClose: () => void };
 export default function LoginModal({ show, onClose }: Props) {
   const auth = useContext(AuthContext);
   if (!auth) throw new Error("LoginModal must be used within <AuthProvider>");
-  const { startOauthPopup, checkMe } = auth;
+  const { startOauthPopup } = auth;
 
   return (
     <Modal

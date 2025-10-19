@@ -30,10 +30,10 @@ export default function Map() {
   }, [placeFilter]);
 
   useEffect(() => {
-    if (auth.isAuthed && mapRef.current) {
+    if (auth?.isAuthed && mapRef.current) {
       fetchPlacesForViewport();
     }
-  }, [auth.isAuthed]);
+  }, [auth?.isAuthed]);
 
   // 프로필 메뉴 외부 클릭 시 닫기
   useEffect(() => {
@@ -436,13 +436,13 @@ export default function Map() {
       isMounted = false;
       if (cleanup) cleanup();
     };
-  }, [auth.isAuthed]);
+  }, [auth?.isAuthed]);
 
   useEffect(() => {
     if (mapRef.current) fetchPlacesForViewport();
   }, [placeFilter]);
 
-  if (auth.loading) {
+  if (auth?.loading) {
     return (
       <div
         style={{
@@ -460,7 +460,7 @@ export default function Map() {
 
   return (
     <section style={{ padding: 0, margin: 0 }}>
-      {!auth.isAuthed ? (
+      {!auth?.isAuthed ? (
         <LoginModal show={true} onClose={() => {}} />
       ) : error ? (
         <p className="text-danger mb-0" style={{ padding: 12 }}>

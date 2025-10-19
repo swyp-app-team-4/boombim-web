@@ -217,7 +217,7 @@ export default function Home() {
 
       {/* 로그인 모달 */}
       {showLoginModal && (
-        <LoginModal onClose={() => setShowLoginModal(false)} />
+        <LoginModal show={true} onClose={() => setShowLoginModal(false)} />
       )}
     </div>
   );
