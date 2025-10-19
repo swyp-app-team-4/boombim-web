@@ -1,0 +1,80 @@
+name: boombim-web CI/CD
+
+on:
+  push:
+    branches: [ main ]     # 필요에 따라 dev 등으로 변경
+  workflow_dispatch:        # 수동 실행도 가능하게
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # (1) 체크아웃
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # (2) Node 설정 + 캐시
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # (3) 의존성 설치
+      - name: Install dependencies
+        run: npm ci
+
+      # (4) 빌드타임 환경 주입 (.env.production)
+      - name: Create .env.production
+        run: |
+          cat > .env.production << 'EOF'
+          VITE_KAKAO_JS_KEY=${{ secrets.KAKAO_JS_KEY }}
+          EOF
+
+      # (5) 빌드
+      - name: Build
+        run: npm run build
+
+      # (6) 산출물 압축
+      - name: Archive dist
+        run: tar -czf dist.tar.gz -C dist .
+
+      # (7) 서버로 전송 (SCP)
+      - name: Upload artifact to NCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          source: "dist.tar.gz"
+          target: "/tmp/boombim-web/"
+
+      # (8) 서버에서 원자적 배포(릴리스 폴더 → 심볼릭 링크 → Nginx reload)
+      - name: Activate release on NCP
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          script: |
+            set -e
+            APP_ROOT=${{ secrets.WEB_ROOT }}        # 예: /var/www/boombim-web
+            RELEASES_DIR="$APP_ROOT/releases"
+            CURRENT_LINK="$APP_ROOT/current"
+            TS=$(date +%Y%m%d%H%M%S)
+
+            sudo mkdir -p "$RELEASES_DIR/$TS"
+            sudo tar -xzf /tmp/boombim-web/dist.tar.gz -C "$RELEASES_DIR/$TS"
+
+            # 심볼릭 링크 스위치 (다운타임 최소화)
+            sudo ln -sfn "$RELEASES_DIR/$TS" "$CURRENT_LINK"
+
+            # 권한(서버 환경에 맞게 필요시 조정)
+            sudo chown -R www-data:www-data "$APP_ROOT" || true
+
+            # Nginx 검증 및 재적용
+            sudo nginx -t
+            sudo systemctl reload nginx
