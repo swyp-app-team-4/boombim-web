@@ -1434,11 +1434,13 @@ export default function Map() {
                   position: "absolute",
                   bottom: 100,
                   right: 20,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 8,
+                  background: "#ffffff",
+                  border: "1px solid #e5e5e5",
+                  borderRadius: "8px",
+                  overflow: "hidden",
                   pointerEvents: "auto",
                   zIndex: 10,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                 }}
               >
                 <button
@@ -1451,13 +1453,12 @@ export default function Map() {
                     width: 40,
                     height: 40,
                     background: "#ffffff",
-                    border: "1px solid #e5e5e5",
-                    borderRadius: "8px",
+                    border: "none",
+                    borderBottom: "1px solid #e5e5e5",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     fontSize: "20px",
                     fontWeight: "bold",
                     color: "#333",
@@ -1465,11 +1466,9 @@ export default function Map() {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = "#f8f9fa";
-                    e.currentTarget.style.borderColor = "#ff6b35";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = "#ffffff";
-                    e.currentTarget.style.borderColor = "#e5e5e5";
                   }}
                 >
                   +
@@ -1484,13 +1483,11 @@ export default function Map() {
                     width: 40,
                     height: 40,
                     background: "#ffffff",
-                    border: "1px solid #e5e5e5",
-                    borderRadius: "8px",
+                    border: "none",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     fontSize: "20px",
                     fontWeight: "bold",
                     color: "#333",
@@ -1498,11 +1495,9 @@ export default function Map() {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = "#f8f9fa";
-                    e.currentTarget.style.borderColor = "#ff6b35";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = "#ffffff";
-                    e.currentTarget.style.borderColor = "#e5e5e5";
                   }}
                 >
                   −
@@ -1611,27 +1606,31 @@ export default function Map() {
                   position: "absolute",
                   top: 80,
                   right: 20,
-                  width: 48,
-                  height: 48,
-                  borderRadius: 8,
-                  border: "none",
+                  padding: "12px 20px",
+                  borderRadius: 24,
+                  border: "1px solid #d1d5db",
                   background: "#ffffff",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                   cursor: isLocating ? "not-allowed" : "pointer",
                   transition: "all 0.2s ease",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: "8px",
                   opacity: isLocating ? 0.6 : 1,
                   pointerEvents: "auto",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: "#374151",
+                  whiteSpace: "nowrap",
                 }}
                 title="현재 위치로 이동"
               >
                 {isLocating ? (
                   <div
                     style={{
-                      width: 20,
-                      height: 20,
+                      width: 16,
+                      height: 16,
                       border: "2px solid #e5e7eb",
                       borderTop: "2px solid #3b82f6",
                       borderRadius: "50%",
@@ -1639,54 +1638,18 @@ export default function Map() {
                     }}
                   />
                 ) : (
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <circle cx="10" cy="10" r="3" fill="#374151" />
-                    <circle
-                      cx="10"
-                      cy="10"
-                      r="6"
-                      stroke="#374151"
-                      strokeWidth="1.5"
-                      fill="none"
-                    />
-                    <line
-                      x1="10"
-                      y1="2"
-                      x2="10"
-                      y2="6"
-                      stroke="#374151"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                    <line
-                      x1="10"
-                      y1="14"
-                      x2="10"
-                      y2="18"
-                      stroke="#374151"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                    <line
-                      x1="2"
-                      y1="10"
-                      x2="6"
-                      y2="10"
-                      stroke="#374151"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                    <line
-                      x1="14"
-                      y1="10"
-                      x2="18"
-                      y2="10"
-                      stroke="#374151"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <img
+                    src="/icons/my_location.svg"
+                    alt="현재 위치"
+                    width="16"
+                    height="16"
+                    style={{
+                      filter:
+                        "brightness(0) saturate(100%) invert(23%) sepia(8%) saturate(1234%) hue-rotate(201deg) brightness(95%) contrast(86%)",
+                    }}
+                  />
                 )}
+                <span>현재 위치로 찾기</span>
               </button>
 
               {/* 혼잡도 공유 버튼 */}
@@ -1716,7 +1679,8 @@ export default function Map() {
                 }}
                 title="혼잡도 공유"
               >
-                혼잡도 공유하기
+                <span style={{ marginRight: "8px", fontSize: "16px" }}>+</span>
+                붐빔 알리기
               </button>
             </div>
           </div>
