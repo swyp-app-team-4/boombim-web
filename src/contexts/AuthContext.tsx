@@ -5,11 +5,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import api from "../lib/axios";
+import api, { setAccessToken } from "../lib/axios";
 
 type User = {
   name: string;
   profile: string;
+  email: string;
   socialProvider: "KAKAO" | "NAVER";
 } | null;
 
@@ -137,10 +138,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const reissueAndCheckMe = useCallback(async () => {
+    console.log("reissueAndCheckMe 호출됨");
+    setLoading(true);
+    try {
+      // 먼저 reissue로 AT 발급
+      console.log("reissue 요청 중...");
+      const reissueResponse = await api.post("/web/reissue");
+      const newAccessToken = reissueResponse.data.data.accessToken;
+      setAccessToken(newAccessToken);
+      console.log("reissue 성공, AT 저장됨");
+
+      // 그 다음 사용자 정보 조회
+      const res = await api.get<ApiEnvelope<RawMe>>("/web/auth/me");
+      console.log("checkMe 성공:", res.data.data);
+      setUser(mapRawMeToUser(res.data.data));
+    } catch (error: any) {
+      console.log("reissueAndCheckMe 실패:", error);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     // 앱 최초 진입 시 로그인 여부 확인
     checkMe();
-  }, [checkMe]);
+  }, []); // checkMe 의존성 제거
 
   const startOauthPopup = useCallback(
     async (provider: "kakao" | "naver"): Promise<"success" | "fail"> => {
@@ -173,11 +197,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (result === "success") {
-        await checkMe(); // 쿠키 세팅 확인
+        await reissueAndCheckMe(); // 바로 reissue 후 사용자 정보 조회
       }
       return result;
     },
-    [checkMe]
+    [reissueAndCheckMe]
   );
 
   const logout = useCallback(async () => {
@@ -189,6 +213,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
       setUser(null);
+      setAccessToken(null); // AT 제거
     }
   }, []);
 

@@ -9,6 +9,7 @@
   inset: 0;
   z-index: 10; /* 지도 위에 고정 */
   pointer-events: none; /* 지도 상호작용 우선 */
+  overflow: hidden;
 }
 
 /* 상단 우측 로그인 버튼 래퍼 */

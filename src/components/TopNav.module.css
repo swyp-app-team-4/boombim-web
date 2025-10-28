@@ -1,0 +1,314 @@
+.navbar {
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+/* 로고 스타일 */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+  gap: 8px;
+}
+
+.logoIcon {
+  width: 100px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+/* 네비게이션 링크 */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navLink {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.navLink:hover {
+  color: #333;
+}
+
+.navLink.active {
+  color: #333;
+  font-weight: 600;
+}
+
+/* 검색바 */
+.searchContainer {
+  flex: 1;
+  max-width: 300px;
+  margin: 0 40px;
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.searchBox:focus-within {
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+}
+
+.searchIcon {
+  color: #999;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.searchInput::placeholder {
+  color: #999;
+}
+
+/* 사용자 액션 */
+.userActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userMenuContainer {
+  position: relative;
+}
+
+.userProfileBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.userProfileBtn:hover {
+  background: #f8f9fa;
+}
+
+.userName {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 사용자 드롭다운 */
+.userDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.userDropdownHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8f9fa;
+}
+
+.userDropdownInfo {
+  flex: 1;
+}
+
+.userDropdownName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 4px;
+}
+
+.userDropdownEmail {
+  font-size: 12px;
+  color: #666;
+}
+
+.userDropdownDivider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 4px 0;
+}
+
+.userDropdownItem {
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.userDropdownItem:hover {
+  background: #f8f9fa;
+  color: #ff6b35;
+}
+
+/* 햄버거 메뉴 버튼 */
+.mobileMenuToggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: #333;
+  margin-left: 12px;
+}
+
+.mobileMenuToggle:hover {
+  color: #ff6b35;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 960px) {
+  .navLinks {
+    gap: 20px;
+  }
+
+  .searchContainer {
+    margin: 0 20px;
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+    height: 56px;
+    position: relative;
+  }
+
+  .mobileMenuToggle {
+    display: block;
+  }
+
+  .navLinks {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    z-index: 999;
+  }
+
+  .navLinks.mobileMenuOpen {
+    max-height: 300px;
+    padding: 16px 0;
+  }
+
+  .navLink {
+    display: block;
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 15px;
+  }
+
+  .navLink:last-child {
+    border-bottom: none;
+  }
+
+  .searchContainer {
+    margin: 0 16px;
+    max-width: 200px;
+    flex: 1;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .logoIcon {
+    width: 80px;
+    height: 24px;
+  }
+
+  .userName {
+    display: none;
+  }
+
+  .userActions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchContainer {
+    display: none;
+  }
+
+  .logoIcon {
+    width: 60px;
+    height: 18px;
+  }
+
+  .mobileMenuToggle {
+    margin-left: 8px;
+  }
+
+  .userActions {
+    gap: 8px;
+  }
+}
