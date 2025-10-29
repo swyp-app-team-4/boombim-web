@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext, useCallback } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import styles from "./MapOverlay.module.css";
 import { AuthContext } from "../contexts/AuthContext";
 import api from "../lib/axios";
@@ -649,6 +649,9 @@ export default function Map() {
     if (!mapRef.current) return;
     const myReqId = ++reqIdRef.current;
 
+    // 현재 클러스터링 상태를 직접 참조
+    const currentClusteringState = isClusteringEnabled;
+
     try {
       const map = mapRef.current;
       const bounds = map.getBounds();
@@ -675,14 +678,6 @@ export default function Map() {
       ) {
         try {
           let res;
-          // 현재 클러스터링 상태를 직접 참조
-          const currentClusteringState = isClusteringEnabled;
-          console.log(
-            "fetchPlacesForViewport - isClusteringEnabled:",
-            isClusteringEnabled,
-            "currentClusteringState:",
-            currentClusteringState
-          );
           if (currentClusteringState) {
             // 클러스터링 적용된 API
             console.log(
