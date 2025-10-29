@@ -1083,19 +1083,24 @@ export default function Map() {
         </p>
       ) : (
         <>
-          {/* 왼쪽 패널 */}
+          {/* 왼쪽 패널 - 오버레이 방식 */}
           <div
             style={{
-              width: "var(--panel-w)" as any,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "400px",
               height: "100%",
               background: "white",
               borderRight: "1px solid #e5e5e5",
               overflow: "hidden",
-              flexShrink: 0,
-              transition: "width 0.3s ease",
-              position: "relative",
+              zIndex: 1000,
+              boxShadow: "2px 0 8px rgba(0,0,0,0.1)",
               display: "flex",
               flexDirection: "column",
+              transform: isPanelOpen ? "translateX(0)" : "translateX(-100%)",
+              transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              pointerEvents: isPanelOpen ? "auto" : "none",
             }}
           >
             {/* 패널 콘텐츠 */}
@@ -1107,10 +1112,12 @@ export default function Map() {
                 height: "100%",
                 padding: "20px",
                 paddingBottom: "80px",
-                opacity: isPanelOpen ? 1 : 0,
-                transition: "opacity 0.2s ease",
                 overflowY: "auto",
                 scrollBehavior: "smooth",
+                transform: isPanelOpen ? "translateX(0)" : "translateX(-20px)",
+                opacity: isPanelOpen ? 1 : 0,
+                transition:
+                  "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, opacity 0.3s ease 0.1s",
               }}
             >
               {/* 즐겨찾기 */}
@@ -1603,12 +1610,12 @@ export default function Map() {
               }}
             />
             <div className={styles.overlay}>
-              {/* 토글 버튼 */}
+              {/* 패널 토글 버튼 */}
               <button
                 onClick={() => setIsPanelOpen(!isPanelOpen)}
                 style={{
                   position: "absolute",
-                  left: "12px",
+                  left: isPanelOpen ? "412px" : "12px", // 패널이 열리면 패널 너비(400px) + 여백(12px)만큼 이동
                   top: "50%",
                   transform: "translateY(-50%)",
                   width: 40,
@@ -1623,7 +1630,7 @@ export default function Map() {
                   boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                   transition:
                     "left 0.3s ease, background 0.2s ease, border-color 0.2s ease",
-                  zIndex: 1000,
+                  zIndex: 1001, // 패널보다 위에 표시
                   pointerEvents: "auto",
                 }}
                 onMouseEnter={(e) => {
@@ -1646,11 +1653,11 @@ export default function Map() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   style={{
-                    transform: isPanelOpen ? "rotate(0deg)" : "rotate(180deg)",
+                    transform: isPanelOpen ? "rotate(180deg)" : "rotate(0deg)",
                     transition: "transform 0.3s ease",
                   }}
                 >
-                  <path d="M15 18l-6-6 6-6" />
+                  <path d="M9 18l6-6-6-6" />
                 </svg>
               </button>
 
