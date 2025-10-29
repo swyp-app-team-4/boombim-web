@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useRef, useState, useContext, useCallback } from "react";
 import styles from "./MapOverlay.module.css";
 import { AuthContext } from "../contexts/AuthContext";
 import api from "../lib/axios";
@@ -25,6 +25,8 @@ export default function Map() {
   const [favoriteTab, setFavoriteTab] = useState<"official" | "member">(
     "official"
   );
+  const [isClusteringEnabled, setIsClusteringEnabled] = useState(true);
+  const isClusteringEnabledRef = useRef(true);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
@@ -453,8 +455,10 @@ export default function Map() {
     }
   };
 
-  // 지도 뷰포트 내 장소 조회
-  const fetchPlacesForViewport = async () => {
+  // 지도 뷰포트 내 장소 조회 (클러스터링 상태 매개변수로 받음)
+  const fetchPlacesForViewportWithClustering = async (
+    clusteringEnabled: boolean
+  ) => {
     if (!mapRef.current) return;
     const myReqId = ++reqIdRef.current;
 
@@ -464,8 +468,15 @@ export default function Map() {
       const sw = bounds.getSouthWest();
       const ne = bounds.getNorthEast();
 
-      const topLeft = { latitude: ne.getLat(), longitude: sw.getLng() };
-      const bottomRight = { latitude: sw.getLat(), longitude: ne.getLng() };
+      const topLeft = {
+        latitude: ne.getLat(),
+        longitude: sw.getLng(),
+      };
+      const bottomRight = {
+        latitude: sw.getLat(),
+        longitude: ne.getLng(),
+      };
+
       const center = map.getCenter();
       const memberCoordinate = userLocRef.current
         ? {
@@ -483,7 +494,20 @@ export default function Map() {
         placeFilterRef.current === "both"
       ) {
         try {
-          const res = await api.post("/web/public/official-place", payload);
+          let res;
+          if (clusteringEnabled) {
+            // 클러스터링 적용된 API
+            console.log(
+              "클러스터링 적용 API 호출 - /web/public/official-place"
+            );
+            res = await api.post("/web/public/official-place", payload);
+          } else {
+            // 클러스터링 미적용 API
+            console.log(
+              "클러스터링 미적용 API 호출 - /app/public/official-place"
+            );
+            res = await api.post("/app/public/official-place", payload);
+          }
           if (reqIdRef.current !== myReqId) return;
           const officialPlaces = res.data?.data ?? [];
           allPlaces = [...allPlaces, ...officialPlaces];
@@ -526,7 +550,22 @@ export default function Map() {
       for (const p of allPlaces) {
         let marker: any;
 
-        if (p.markerType === "CLUSTER") {
+        // 클러스터링이 비활성화된 경우 모든 장소를 개별 마커로 표시
+        if (!clusteringEnabled || p.markerType !== "CLUSTER") {
+          const markerImage = new (window as any).kakao.maps.MarkerImage(
+            getMarkerImage(p.congestionLevelName),
+            new (window as any).kakao.maps.Size(32, 32),
+            { offset: new (window as any).kakao.maps.Point(14, 14) }
+          );
+
+          marker = new (window as any).kakao.maps.Marker({
+            position: new (window as any).kakao.maps.LatLng(
+              p.coordinate.latitude,
+              p.coordinate.longitude
+            ),
+            image: markerImage,
+          });
+        } else if (p.markerType === "CLUSTER") {
           const clusterSize = p.clusterSize;
           const size = Math.max(40, Math.min(80, 40 + clusterSize * 4));
           const radius = size / 2;
@@ -565,9 +604,146 @@ export default function Map() {
             ),
             image: clusterImage,
           });
-        } else {
+        }
+
+        (window as any).kakao.maps.event.addListener(
+          marker,
+          "click",
+          async () => {
+            // 클러스터링이 활성화되고 클러스터 마커인 경우에만 확대
+            if (clusteringEnabled && p.markerType === "CLUSTER") {
+              const position = new (window as any).kakao.maps.LatLng(
+                p.coordinate.latitude,
+                p.coordinate.longitude
+              );
+              mapRef.current.setCenter(position);
+              mapRef.current.setLevel(mapRef.current.getLevel() - 2);
+              return;
+            }
+
+            // 개별 장소 클릭 처리
+            if (p.placeType && p.placeType !== "OFFICIAL_PLACE") {
+              // 사용자 장소 상세 조회
+              await loadMemberPlaceDetail(p.placeId);
+              return;
+            }
+
+            // 공식 장소 상세 조회 (placeId 또는 officialPlaceId 사용)
+            const placeId = p.placeId || p.officialPlaceId;
+            await loadOfficialPlaceOverview(placeId);
+          }
+        );
+
+        marker.setMap(mapRef.current);
+        overlaysRef.current.push(marker);
+      }
+    } catch (e: any) {
+      if (e?.code !== "ERR_CANCELED") {
+        console.error("장소 데이터 로드 실패:", e);
+      }
+    }
+  };
+
+  // 지도 뷰포트 내 장소 조회
+  const fetchPlacesForViewport = async () => {
+    if (!mapRef.current) return;
+    const myReqId = ++reqIdRef.current;
+
+    try {
+      const map = mapRef.current;
+      const bounds = map.getBounds();
+      const sw = bounds.getSouthWest();
+      const ne = bounds.getNorthEast();
+
+      const topLeft = { latitude: ne.getLat(), longitude: sw.getLng() };
+      const bottomRight = { latitude: sw.getLat(), longitude: ne.getLng() };
+      const center = map.getCenter();
+      const memberCoordinate = userLocRef.current
+        ? {
+            latitude: userLocRef.current.lat,
+            longitude: userLocRef.current.lng,
+          }
+        : { latitude: center.getLat(), longitude: center.getLng() };
+      const zoomLevel = map.getLevel();
+
+      const payload = { topLeft, bottomRight, memberCoordinate, zoomLevel };
+      let allPlaces: any[] = [];
+
+      if (
+        placeFilterRef.current === "official" ||
+        placeFilterRef.current === "both"
+      ) {
+        try {
+          let res;
+          // 현재 클러스터링 상태를 직접 참조
+          const currentClusteringState = isClusteringEnabled;
+          console.log(
+            "fetchPlacesForViewport - isClusteringEnabled:",
+            isClusteringEnabled,
+            "currentClusteringState:",
+            currentClusteringState
+          );
+          if (currentClusteringState) {
+            // 클러스터링 적용된 API
+            console.log(
+              "지도 이동 - 클러스터링 적용 API 호출 - /web/public/official-place"
+            );
+            res = await api.post("/web/public/official-place", payload);
+          } else {
+            // 클러스터링 미적용 API
+            console.log(
+              "지도 이동 - 클러스터링 미적용 API 호출 - /app/public/official-place"
+            );
+            res = await api.post("/app/public/official-place", payload);
+          }
+          if (reqIdRef.current !== myReqId) return;
+          const officialPlaces = res.data?.data ?? [];
+          allPlaces = [...allPlaces, ...officialPlaces];
+        } catch (e: any) {
+          if (e?.code !== "ERR_CANCELED")
+            console.error("공식 장소 조회 실패:", e);
+        }
+      }
+
+      if (
+        placeFilterRef.current === "member" ||
+        placeFilterRef.current === "both"
+      ) {
+        try {
+          const res = await api.post("/web/public/member-place", payload);
+          if (reqIdRef.current !== myReqId) return;
+          const memberPlaces = res.data?.data ?? [];
+          allPlaces = [...allPlaces, ...memberPlaces];
+        } catch (e: any) {
+          if (e?.code !== "ERR_CANCELED")
+            console.error("사용자 장소 조회 실패:", e);
+        }
+      }
+
+      if (reqIdRef.current !== myReqId) return;
+
+      overlaysRef.current.forEach((ov) => ov.setMap(null));
+      overlaysRef.current = [];
+
+      const getMarkerImage = (congestionLevel: string) => {
+        const levelMap: { [key: string]: string } = {
+          여유: congestionLow,
+          보통: congestionNormal,
+          "약간 붐빔": congestionCrowded,
+          붐빔: congestionVeryCrowded,
+        };
+        return levelMap[congestionLevel] || levelMap["보통"];
+      };
+
+      for (const p of allPlaces) {
+        let marker: any;
+
+        // 클러스터링이 비활성화된 경우 모든 장소를 개별 마커로 표시
+        if (!currentClusteringState || p.markerType !== "CLUSTER") {
+          // congestionLevelName이 없는 경우 기본값 사용
+          const congestionLevel = p.congestionLevelName || "보통";
           const markerImage = new (window as any).kakao.maps.MarkerImage(
-            getMarkerImage(p.congestionLevelName),
+            getMarkerImage(congestionLevel),
             new (window as any).kakao.maps.Size(32, 32),
             { offset: new (window as any).kakao.maps.Point(14, 14) }
           );
@@ -579,13 +755,53 @@ export default function Map() {
             ),
             image: markerImage,
           });
+        } else if (p.markerType === "CLUSTER") {
+          const clusterSize = p.clusterSize;
+          const size = Math.max(40, Math.min(80, 40 + clusterSize * 4));
+          const radius = size / 2;
+
+          const clusterImage = new (window as any).kakao.maps.MarkerImage(
+            "data:image/svg+xml;base64," +
+              btoa(`
+              <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+                  </filter>
+                </defs>
+                <circle cx="${radius}" cy="${radius}" r="${
+                radius - 4
+              }" fill="#10b981" stroke="#ffffff" stroke-width="4" filter="url(#shadow)"/>
+                <circle cx="${radius}" cy="${radius}" r="${
+                radius - 8
+              }" fill="#10b981" opacity="0.2"/>
+                <text x="${radius}" y="${
+                radius + 4
+              }" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="${Math.max(
+                12,
+                Math.min(16, size / 4)
+              )}" font-weight="bold">${clusterSize}</text>
+              </svg>
+            `),
+            new (window as any).kakao.maps.Size(size, size),
+            { offset: new (window as any).kakao.maps.Point(radius, radius) }
+          );
+
+          marker = new (window as any).kakao.maps.Marker({
+            position: new (window as any).kakao.maps.LatLng(
+              p.coordinate.latitude,
+              p.coordinate.longitude
+            ),
+            image: clusterImage,
+          });
         }
 
         (window as any).kakao.maps.event.addListener(
           marker,
           "click",
           async () => {
-            if (p.markerType === "CLUSTER") {
+            // 클러스터링이 활성화되고 클러스터 마커인 경우에만 확대
+            if (currentClusteringState && p.markerType === "CLUSTER") {
               const position = new (window as any).kakao.maps.LatLng(
                 p.coordinate.latitude,
                 p.coordinate.longitude
@@ -595,13 +811,16 @@ export default function Map() {
               return;
             }
 
+            // 개별 장소 클릭 처리
             if (p.placeType && p.placeType !== "OFFICIAL_PLACE") {
               // 사용자 장소 상세 조회
               await loadMemberPlaceDetail(p.placeId);
               return;
             }
 
-            await loadOfficialPlaceOverview(p.placeId);
+            // 공식 장소 상세 조회 (placeId 또는 officialPlaceId 사용)
+            const placeId = p.placeId || p.officialPlaceId;
+            await loadOfficialPlaceOverview(placeId);
           }
         );
 
@@ -618,7 +837,10 @@ export default function Map() {
   const handleIdle = () => {
     if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
     idleTimerRef.current = setTimeout(() => {
-      if (mapRef.current) fetchPlacesForViewport();
+      if (mapRef.current) {
+        // ref를 사용하여 현재 클러스터링 상태를 참조
+        fetchPlacesForViewportWithClustering(isClusteringEnabledRef.current);
+      }
     }, 250);
   };
 
@@ -731,8 +953,17 @@ export default function Map() {
   }, []);
 
   useEffect(() => {
-    if (mapRef.current) fetchPlacesForViewport();
+    if (mapRef.current) {
+      fetchPlacesForViewportWithClustering(isClusteringEnabled);
+    }
   }, [placeFilter]);
+
+  // 초기 로딩 시 마커 표시
+  useEffect(() => {
+    if (mapRef.current) {
+      fetchPlacesForViewportWithClustering(isClusteringEnabled);
+    }
+  }, []);
 
   // 개요 공통 로더
   const loadMemberPlaceDetail = async (memberPlaceId: number) => {
@@ -1595,6 +1826,50 @@ export default function Map() {
                   }}
                 >
                   전체
+                </button>
+              </div>
+
+              {/* 클러스터링 토글 버튼 */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 80,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  pointerEvents: "auto",
+                  zIndex: 10,
+                }}
+              >
+                <button
+                  onClick={() => {
+                    const newClusteringState = !isClusteringEnabled;
+                    setIsClusteringEnabled(newClusteringState);
+                    isClusteringEnabledRef.current = newClusteringState;
+
+                    // 즉시 새로운 상태로 API 호출
+                    setTimeout(() => {
+                      if (mapRef.current) {
+                        // 현재 상태를 직접 전달하여 API 호출
+                        fetchPlacesForViewportWithClustering(
+                          newClusteringState
+                        );
+                      }
+                    }, 100);
+                  }}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: 20,
+                    border: "none",
+                    background: isClusteringEnabled ? "#10b981" : "#ef4444",
+                    color: "#ffffff",
+                    fontWeight: 600,
+                    fontSize: 14,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {isClusteringEnabled ? "클러스터링 ON" : "클러스터링 OFF"}
                 </button>
               </div>
 
