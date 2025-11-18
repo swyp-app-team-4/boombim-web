@@ -6,6 +6,7 @@ import congestionLow from "../assets/markers/congestion-low.png";
 import congestionNormal from "../assets/markers/congestion-normal.png";
 import congestionCrowded from "../assets/markers/congestion-crowded.png";
 import congestionVeryCrowded from "../assets/markers/congestion-very-crowded.png";
+import congestionExpired from "../assets/markers/congestion-expired.png";
 import LoginModal from "../components/LoginModal";
 
 type PlaceFilter = "official" | "member" | "both";
@@ -537,7 +538,10 @@ export default function Map() {
       overlaysRef.current.forEach((ov) => ov.setMap(null));
       overlaysRef.current = [];
 
-      const getMarkerImage = (congestionLevel: string) => {
+      const getMarkerImage = (congestionLevel: string, isExpired?: boolean) => {
+        if (isExpired) {
+          return congestionExpired;
+        }
         const levelMap: { [key: string]: string } = {
           여유: congestionLow,
           보통: congestionNormal,
@@ -553,7 +557,7 @@ export default function Map() {
         // 클러스터링이 비활성화된 경우 모든 장소를 개별 마커로 표시
         if (!clusteringEnabled || p.markerType !== "CLUSTER") {
           const markerImage = new (window as any).kakao.maps.MarkerImage(
-            getMarkerImage(p.congestionLevelName),
+            getMarkerImage(p.congestionLevelName, p.isExpired),
             new (window as any).kakao.maps.Size(32, 32),
             { offset: new (window as any).kakao.maps.Point(14, 14) }
           );
@@ -720,7 +724,10 @@ export default function Map() {
       overlaysRef.current.forEach((ov) => ov.setMap(null));
       overlaysRef.current = [];
 
-      const getMarkerImage = (congestionLevel: string) => {
+      const getMarkerImage = (congestionLevel: string, isExpired?: boolean) => {
+        if (isExpired) {
+          return congestionExpired;
+        }
         const levelMap: { [key: string]: string } = {
           여유: congestionLow,
           보통: congestionNormal,
@@ -738,7 +745,7 @@ export default function Map() {
           // congestionLevelName이 없는 경우 기본값 사용
           const congestionLevel = p.congestionLevelName || "보통";
           const markerImage = new (window as any).kakao.maps.MarkerImage(
-            getMarkerImage(congestionLevel),
+            getMarkerImage(congestionLevel, p.isExpired),
             new (window as any).kakao.maps.Size(32, 32),
             { offset: new (window as any).kakao.maps.Point(14, 14) }
           );
