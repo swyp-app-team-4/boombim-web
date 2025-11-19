@@ -76,25 +76,42 @@ export default function Map() {
   const overviewReqIdRef = useRef(0);
   const searchTimeoutRef = useRef<any>(null);
 
-  const CLUSTER_DEFAULT_COLOR = "#C2C4C8";
+  const CLUSTER_DEFAULT_COLOR = "#FFFFFF";
   const clusterColorMap: Record<string, string> = {
-    여유: "#78C841",
-    보통: "#3E87FF",
-    "약간 붐빔": "#FFCE0E",
-    붐빔: "#FF8989",
+    여유: "#E2FAD4",
+    보통: "#D9E8FF",
+    "약간 붐빔": "#FFF7D9",
+    붐빔: "#FFDCDC",
   };
-  const getClusterColor = (counts?: Record<string, number>) => {
-    if (!counts) return CLUSTER_DEFAULT_COLOR;
+  const clusterLevelPriority: Record<string, number> = {
+    붐빔: 4,
+    "약간 붐빔": 3,
+    보통: 2,
+    여유: 1,
+  };
+  const getDominantClusterLevel = (counts?: Record<string, number>) => {
+    if (!counts) return null;
     let dominantLevel: string | null = null;
     let dominantCount = -1;
+    let dominantPriority = -1;
     Object.entries(counts).forEach(([level, count]) => {
       if (typeof count !== "number" || count <= 0) return;
+      const priority = clusterLevelPriority[level] ?? 0;
       if (count > dominantCount) {
         dominantCount = count;
         dominantLevel = level;
+        dominantPriority = priority;
+        return;
+      }
+      if (count === dominantCount && priority > dominantPriority) {
+        dominantLevel = level;
+        dominantPriority = priority;
       }
     });
-
+    return dominantLevel;
+  };
+  const getClusterColor = (counts?: Record<string, number>) => {
+    const dominantLevel = getDominantClusterLevel(counts);
     if (!dominantLevel) return CLUSTER_DEFAULT_COLOR;
     return clusterColorMap[dominantLevel] || CLUSTER_DEFAULT_COLOR;
   };
@@ -602,14 +619,11 @@ export default function Map() {
                   </filter>
                 </defs>
                 <circle cx="${radius}" cy="${radius}" r="${
-                radius - 4
-              }" fill="${clusterColor}" stroke="#ffffff" stroke-width="4" filter="url(#shadow)"/>
-                <circle cx="${radius}" cy="${radius}" r="${
                 radius - 8
-              }" fill="${clusterColor}" opacity="0.2"/>
+              }" fill="${clusterColor}" opacity="0.8"/>
                 <text x="${radius}" y="${
                 radius + 4
-              }" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="${Math.max(
+              }" text-anchor="middle" fill="black" font-family="Arial, sans-serif" font-size="${Math.max(
                 12,
                 Math.min(16, size / 4)
               )}" font-weight="bold">${clusterSize}</text>
@@ -785,14 +799,11 @@ export default function Map() {
                   </filter>
                 </defs>
                 <circle cx="${radius}" cy="${radius}" r="${
-                radius - 4
-              }" fill="${clusterColor}" stroke="#ffffff" stroke-width="4" filter="url(#shadow)"/>
-                <circle cx="${radius}" cy="${radius}" r="${
                 radius - 8
-              }" fill="${clusterColor}" opacity="0.2"/>
+              }" fill="${clusterColor}" opacity="0.8"/>
                 <text x="${radius}" y="${
                 radius + 4
-              }" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="${Math.max(
+              }" text-anchor="middle" fill="black" font-family="Arial, sans-serif" font-size="${Math.max(
                 12,
                 Math.min(16, size / 4)
               )}" font-weight="bold">${clusterSize}</text>
