@@ -76,6 +76,29 @@ export default function Map() {
   const overviewReqIdRef = useRef(0);
   const searchTimeoutRef = useRef<any>(null);
 
+  const CLUSTER_DEFAULT_COLOR = "#C2C4C8";
+  const clusterColorMap: Record<string, string> = {
+    여유: "#78C841",
+    보통: "#3E87FF",
+    "약간 붐빔": "#FFCE0E",
+    붐빔: "#FF8989",
+  };
+  const getClusterColor = (counts?: Record<string, number>) => {
+    if (!counts) return CLUSTER_DEFAULT_COLOR;
+    let dominantLevel: string | null = null;
+    let dominantCount = -1;
+    Object.entries(counts).forEach(([level, count]) => {
+      if (typeof count !== "number" || count <= 0) return;
+      if (count > dominantCount) {
+        dominantCount = count;
+        dominantLevel = level;
+      }
+    });
+
+    if (!dominantLevel) return CLUSTER_DEFAULT_COLOR;
+    return clusterColorMap[dominantLevel] || CLUSTER_DEFAULT_COLOR;
+  };
+
   // 폴리곤 깜빡임 애니메이션
   const startPolygonBlink = () => {
     if (polygonBlinkIntervalRef.current) return;
@@ -573,6 +596,7 @@ export default function Map() {
           const clusterSize = p.clusterSize;
           const size = Math.max(40, Math.min(80, 40 + clusterSize * 4));
           const radius = size / 2;
+          const clusterColor = getClusterColor(p.congestionLevelCounts);
 
           const clusterImage = new (window as any).kakao.maps.MarkerImage(
             "data:image/svg+xml;base64," +
@@ -585,10 +609,10 @@ export default function Map() {
                 </defs>
                 <circle cx="${radius}" cy="${radius}" r="${
                 radius - 4
-              }" fill="#10b981" stroke="#ffffff" stroke-width="4" filter="url(#shadow)"/>
+              }" fill="${clusterColor}" stroke="#ffffff" stroke-width="4" filter="url(#shadow)"/>
                 <circle cx="${radius}" cy="${radius}" r="${
                 radius - 8
-              }" fill="#10b981" opacity="0.2"/>
+              }" fill="${clusterColor}" opacity="0.2"/>
                 <text x="${radius}" y="${
                 radius + 4
               }" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="${Math.max(
@@ -761,6 +785,7 @@ export default function Map() {
           const clusterSize = p.clusterSize;
           const size = Math.max(40, Math.min(80, 40 + clusterSize * 4));
           const radius = size / 2;
+          const clusterColor = getClusterColor(p.congestionLevelCounts);
 
           const clusterImage = new (window as any).kakao.maps.MarkerImage(
             "data:image/svg+xml;base64," +
@@ -773,10 +798,10 @@ export default function Map() {
                 </defs>
                 <circle cx="${radius}" cy="${radius}" r="${
                 radius - 4
-              }" fill="#10b981" stroke="#ffffff" stroke-width="4" filter="url(#shadow)"/>
+              }" fill="${clusterColor}" stroke="#ffffff" stroke-width="4" filter="url(#shadow)"/>
                 <circle cx="${radius}" cy="${radius}" r="${
                 radius - 8
-              }" fill="#10b981" opacity="0.2"/>
+              }" fill="${clusterColor}" opacity="0.2"/>
                 <text x="${radius}" y="${
                 radius + 4
               }" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="${Math.max(
