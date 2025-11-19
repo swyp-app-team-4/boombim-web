@@ -9,7 +9,7 @@ import congestionVeryCrowded from "../assets/markers/congestion-very-crowded.png
 import congestionExpired from "../assets/markers/congestion-expired.png";
 import LoginModal from "../components/LoginModal";
 
-type PlaceFilter = "official" | "member" | "both";
+type PlaceFilter = "official" | "member";
 
 export default function Map() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -513,10 +513,7 @@ export default function Map() {
       const payload = { topLeft, bottomRight, memberCoordinate, zoomLevel };
       let allPlaces: any[] = [];
 
-      if (
-        placeFilterRef.current === "official" ||
-        placeFilterRef.current === "both"
-      ) {
+      if (placeFilterRef.current === "official") {
         try {
           let res;
           if (clusteringEnabled) {
@@ -541,10 +538,7 @@ export default function Map() {
         }
       }
 
-      if (
-        placeFilterRef.current === "member" ||
-        placeFilterRef.current === "both"
-      ) {
+      if (placeFilterRef.current === "member") {
         try {
           const res = await api.post("/web/public/member-place", payload);
           if (reqIdRef.current !== myReqId) return;
@@ -700,10 +694,7 @@ export default function Map() {
       const payload = { topLeft, bottomRight, memberCoordinate, zoomLevel };
       let allPlaces: any[] = [];
 
-      if (
-        placeFilterRef.current === "official" ||
-        placeFilterRef.current === "both"
-      ) {
+      if (placeFilterRef.current === "official") {
         try {
           let res;
           if (currentClusteringState) {
@@ -728,10 +719,7 @@ export default function Map() {
         }
       }
 
-      if (
-        placeFilterRef.current === "member" ||
-        placeFilterRef.current === "both"
-      ) {
+      if (placeFilterRef.current === "member") {
         try {
           const res = await api.post("/web/public/member-place", payload);
           if (reqIdRef.current !== myReqId) return;
@@ -1835,41 +1823,14 @@ export default function Map() {
                 >
                   사용자 장소
                 </button>
-                <button
-                  onClick={() => {
-                    stopPolygonBlink();
-                    setShowPlaceDetail(false);
-                    setSelectedPlace(null);
-                    if (polygonRef.current) {
-                      polygonRef.current.setMap(null);
-                      polygonRef.current = null;
-                    }
-                    setPlaceFilter("both");
-                  }}
-                  style={{
-                    padding: "8px 16px",
-                    borderRadius: 20,
-                    border: "none",
-                    background: placeFilter === "both" ? "#2563eb" : "#ffffff",
-                    color: placeFilter === "both" ? "#ffffff" : "#374151",
-                    fontWeight: 600,
-                    fontSize: 14,
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  전체
-                </button>
               </div>
 
               {/* 클러스터링 토글 버튼 */}
               <div
                 style={{
                   position: "absolute",
-                  top: 80,
-                  left: "50%",
-                  transform: "translateX(-50%)",
+                  bottom: 20,
+                  right: 20,
                   pointerEvents: "auto",
                   zIndex: 10,
                 }}
