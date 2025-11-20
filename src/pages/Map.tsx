@@ -592,7 +592,7 @@ export default function Map() {
         if (!clusteringEnabled || p.markerType !== "CLUSTER") {
           const markerImage = new (window as any).kakao.maps.MarkerImage(
             getMarkerImage(p.congestionLevelName, p.isExpired),
-            new (window as any).kakao.maps.Size(32, 32),
+            new (window as any).kakao.maps.Size(18, 24),
             { offset: new (window as any).kakao.maps.Point(14, 14) }
           );
 
@@ -772,7 +772,7 @@ export default function Map() {
           const congestionLevel = p.congestionLevelName || "보통";
           const markerImage = new (window as any).kakao.maps.MarkerImage(
             getMarkerImage(congestionLevel, p.isExpired),
-            new (window as any).kakao.maps.Size(32, 32),
+            new (window as any).kakao.maps.Size(18, 24),
             { offset: new (window as any).kakao.maps.Point(14, 14) }
           );
 
