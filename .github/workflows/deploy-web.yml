@@ -2,7 +2,7 @@ name: boombim-web CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -16,8 +16,8 @@ jobs:
       - name: Use Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -34,7 +34,7 @@ jobs:
       - name: Archive dist
         run: tar -czf dist.tar.gz -C dist .
 
-      - name: Upload artifact to NCP
+      - name: Upload artifact to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -44,7 +44,7 @@ jobs:
           source: "dist.tar.gz"
           target: "/tmp/boombim-web/"
 
-      - name: Activate release on NCP
+      - name: Activate release on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -58,16 +58,15 @@ jobs:
             CURRENT_LINK="$APP_ROOT/current"
             TS=$(date +%Y%m%d%H%M%S)
 
-            # 릴리스 폴더 생성 및 산출물 전개
-            sudo /usr/bin/mkdir -p "$RELEASES_DIR/$TS"
-            sudo /usr/bin/tar -xzf /tmp/boombim-web/dist.tar.gz -C "$RELEASES_DIR/$TS"
+            sudo mkdir -p "$RELEASES_DIR/$TS"
+            sudo tar -xzf /tmp/boombim-web/dist.tar.gz -C "$RELEASES_DIR/$TS"
 
-            # 심볼릭 링크 스위치 (다운타임 최소화)
-            sudo /usr/bin/ln -sfn "$RELEASES_DIR/$TS" "$CURRENT_LINK"
+            # 심볼릭 링크 스위치
+            sudo ln -sfn "$RELEASES_DIR/$TS" "$CURRENT_LINK"
 
-            # 권한 정리 (nginx 유저가 다르면 변경)
-            sudo /usr/bin/chown -R www-data:www-data "$APP_ROOT" || true
+            # Amazon Linux 기준 nginx 유저는 보통 nginx
+            sudo chown -R nginx:nginx "$APP_ROOT" || true
 
-            # Nginx 검사 및 재적용
-            sudo /usr/sbin/nginx -t
-            sudo /usr/bin/systemctl reload nginx
+            # Nginx 설정 체크 & 재적용
+            sudo nginx -t
+            sudo systemctl reload nginx
