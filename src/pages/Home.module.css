@@ -22,33 +22,19 @@
 }
 
 .downloadButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
-  background: #ffffff;
-  color: #333333;
+  display: inline-block;
   text-decoration: none;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 1rem;
   transition: all 0.3s ease;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .downloadButton:hover {
-  background: #f5f5f5;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  color: #333333;
-  text-decoration: none;
-  border-color: #d0d0d0;
+  opacity: 0.9;
 }
 
-.downloadButton svg {
-  width: 24px;
-  height: 24px;
+.downloadButton img {
+  display: block;
+  height: 60px;
 }
 
 .featureGrid {
@@ -265,7 +251,14 @@
   .downloadButton {
     width: 100%;
     max-width: 280px;
+    display: flex;
     justify-content: center;
+  }
+
+  .downloadButton img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
   }
 
   .featureGrid {
