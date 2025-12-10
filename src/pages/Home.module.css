@@ -1,391 +1,355 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
-
-/* 히어로 섹션 */
-.hero {
-  display: flex;
-  align-items: center;
-  min-height: 80vh;
+  background: white;
+  padding: 80px 24px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 20px;
-  gap: 60px;
 }
 
-.heroContent {
-  flex: 1;
-  max-width: 600px;
+.title {
+  color: #000000;
+  font-size: 2.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 40px 0;
 }
 
-.heroTitle {
-  font-size: 3.5rem;
-  font-weight: 800;
-  line-height: 1.2;
-  margin-bottom: 24px;
-  color: #2d3748;
-}
-
-.highlight {
-  background: linear-gradient(135deg, #ff6b35, #4caf50);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.heroDescription {
-  font-size: 1.25rem;
-  line-height: 1.6;
-  color: #4a5568;
-  margin-bottom: 40px;
-}
-
-.heroActions {
+.downloadButtons {
   display: flex;
   gap: 16px;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
-.primaryButton {
-  background: linear-gradient(135deg, #ff6b35, #4caf50);
-  color: white;
-  padding: 16px 32px;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-}
-
-.primaryButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
-  color: white;
-  text-decoration: none;
-}
-
-.secondaryButton {
-  background: transparent;
-  border: 2px solid #e2e8f0;
-  color: #4a5568;
-  padding: 14px 32px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.secondaryButton:hover {
-  border-color: #ff6b35;
-  color: #ff6b35;
-  transform: translateY(-2px);
-}
-
-.heroImage {
-  flex: 1;
-  display: flex;
-  justify-content: center;
+.downloadButton {
+  display: inline-flex;
   align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: #ffffff;
+  color: #333333;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.mockupContainer {
-  position: relative;
-  width: 300px;
-  height: 600px;
+.downloadButton:hover {
+  background: #f5f5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  color: #333333;
+  text-decoration: none;
+  border-color: #d0d0d0;
 }
 
-.mockupPhone {
-  width: 100%;
-  height: 100%;
-  background: #2d3748;
-  border-radius: 30px;
-  padding: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.mockupScreen {
-  width: 100%;
-  height: 100%;
-  background: #f7fafc;
-  border-radius: 20px;
-  overflow: hidden;
-  position: relative;
-}
-
-.mockupMap {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: relative;
-}
-
-.mockupMarker {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background: #ff6b35;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.5);
-  animation: pulse 2s infinite;
-}
-
-.mockupMarker:nth-child(1) {
-  top: 30%;
-  left: 40%;
-  animation-delay: 0s;
-}
-
-.mockupMarker:nth-child(2) {
-  top: 60%;
-  left: 20%;
-  animation-delay: 0.5s;
-}
-
-.mockupMarker:nth-child(3) {
-  top: 70%;
-  left: 70%;
-  animation-delay: 1s;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.8;
-  }
-}
-
-/* 기능 소개 섹션 */
-.features {
-  background: white;
-  padding: 100px 20px;
-}
-
-.sectionHeader {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto 80px;
-}
-
-.sectionTitle {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 16px;
-}
-
-.sectionDescription {
-  font-size: 1.2rem;
-  color: #4a5568;
-  line-height: 1.6;
+.downloadButton svg {
+  width: 24px;
+  height: 24px;
 }
 
 .featureGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin-top: 80px;
 }
 
 .featureCard {
-  text-align: center;
-  padding: 40px 20px;
+  padding: 40px 32px;
+  background: #fb9e3a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  background: #f8fafc;
+  text-align: center;
   transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .featureCard:hover {
+  background: #f5a042;
+  border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 24px rgba(251, 158, 58, 0.3);
 }
 
 .featureIcon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #ff6b35, #4caf50);
-  border-radius: 20px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 24px;
-  color: white;
+  color: #ffffff;
 }
 
 .featureTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 16px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
 }
 
 .featureDescription {
-  color: #4a5568;
-  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
-/* 사용법 섹션 */
-.howToUse {
-  background: #f8fafc;
-  padding: 100px 20px;
+.serviceSection {
+  margin-top: 120px;
+  text-align: center;
 }
 
-.stepsContainer {
-  max-width: 800px;
+.serviceTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 48px;
+}
+
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1000px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
 }
 
-.step {
+.serviceCard {
+  padding: 40px 32px;
+  background: #fb9e3a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-align: left;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.serviceCard:hover {
+  background: #f5a042;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(251, 158, 58, 0.3);
+}
+
+.serviceCardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.serviceCardDescription {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.howToSection {
+  margin-top: 120px;
+  text-align: center;
+}
+
+.downloadSection {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.howToTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 48px;
+}
+
+.howToGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.howToCard {
+  padding: 40px 32px;
+  background: #fb9e3a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-align: left;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.howToCard:hover {
+  background: #f5a042;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(251, 158, 58, 0.3);
+}
+
+.howToIcon {
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
-  gap: 32px;
-  padding: 32px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  justify-content: center;
+  margin-bottom: 24px;
+  color: #ffffff;
+}
+
+.howToCardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 32px;
+}
+
+.howToSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.howToStep {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
 }
 
 .stepNumber {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #ff6b35, #4caf50);
-  color: white;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
   font-weight: 700;
-  flex-shrink: 0;
+  font-size: 0.875rem;
+  color: #ffffff;
 }
 
-.stepContent {
+.stepText {
   flex: 1;
-}
-
-.stepTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 8px;
-}
-
-.stepDescription {
-  color: #4a5568;
-  line-height: 1.6;
-}
-
-/* CTA 섹션 */
-.cta {
-  background: linear-gradient(135deg, #ff6b35, #4caf50);
-  padding: 100px 20px;
-  text-align: center;
-}
-
-.ctaContent {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.ctaTitle {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 16px;
-}
-
-.ctaDescription {
-  font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 40px;
-  line-height: 1.6;
-}
-
-.ctaButton {
-  background: white;
-  color: #ff6b35;
-  padding: 16px 32px;
-  border-radius: 12px;
-  text-decoration: none;
+  line-height: 1.7;
+  font-size: 1rem;
   font-weight: 600;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  display: inline-block;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin: 0;
 }
 
-.ctaButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  color: #ff6b35;
-  text-decoration: none;
-}
-
-/* 반응형 디자인 */
 @media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 60px 20px;
-    gap: 40px;
-  }
-
-  .heroTitle {
-    font-size: 2.5rem;
-  }
-
-  .heroActions {
-    justify-content: center;
-  }
-
-  .mockupContainer {
-    width: 250px;
-    height: 500px;
-  }
-
-  .sectionTitle {
+  .title {
     font-size: 2rem;
+    margin-bottom: 30px;
   }
 
-  .step {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
+  .downloadSection {
+    margin-bottom: 40px;
   }
 
-  .ctaTitle {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .heroTitle {
-    font-size: 2rem;
-  }
-
-  .heroDescription {
-    font-size: 1.1rem;
-  }
-
-  .heroActions {
+  .downloadButtons {
     flex-direction: column;
     align-items: center;
   }
 
-  .primaryButton,
-  .secondaryButton {
+  .downloadButton {
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  .featureGrid {
+    grid-template-columns: 1fr;
+    margin-top: 60px;
+  }
+
+  .serviceSection {
+    margin-top: 80px;
+  }
+
+  .serviceTitle {
+    font-size: 1.75rem;
+  }
+
+  .serviceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .howToSection {
+    margin-top: 80px;
+  }
+
+  .howToTitle {
+    font-size: 1.75rem;
+  }
+
+  .howToGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+  }
+
+  .downloadSection {
+    margin-bottom: 32px;
+  }
+
+  .container {
+    padding: 60px 16px;
+  }
+
+  .featureCard {
+    padding: 24px;
+  }
+
+  .serviceSection {
+    margin-top: 60px;
+  }
+
+  .serviceTitle {
+    font-size: 1.5rem;
+  }
+
+  .serviceCard {
+    padding: 32px 24px;
+  }
+
+  .howToSection {
+    margin-top: 60px;
+  }
+
+  .howToTitle {
+    font-size: 1.5rem;
+  }
+
+  .howToCard {
+    padding: 32px 24px;
+  }
+
+  .howToIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .howToCardTitle {
+    font-size: 1.25rem;
+  }
+
+  .stepText {
+    font-size: 0.9375rem;
   }
 }

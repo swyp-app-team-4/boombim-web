@@ -93,13 +93,6 @@ export default function TopNav() {
             >
               지도
             </NavLink>
-            <NavLink
-              to="/guide"
-              className={styles.navLink}
-              onClick={() => setShowMobileMenu(false)}
-            >
-              이용 방법
-            </NavLink>
           </div>
 
           {/* 검색바 */}

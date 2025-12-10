@@ -4,7 +4,6 @@ import TopNav from "./components/TopNav";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Map from "./pages/Map";
-import Guide from "./pages/Guide";
 import OauthFinish from "./pages/OauthFinish";
 import "./App.css";
 
@@ -27,7 +26,6 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/map" element={<Map />} />
-            <Route path="/guide" element={<Guide />} />
             <Route path="/oauth/finish" element={<OauthFinish />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

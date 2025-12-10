@@ -1200,7 +1200,7 @@ export default function Map() {
                       transition: "all 0.2s ease",
                     }}
                   >
-                    공식 장소
+                    오픈 서울
                   </button>
                   <button
                     onClick={() => {
@@ -1221,7 +1221,7 @@ export default function Map() {
                       transition: "all 0.2s ease",
                     }}
                   >
-                    사용자 장소
+                    현장 피드
                   </button>
                 </div>
 
@@ -1380,8 +1380,8 @@ export default function Map() {
                               }}
                             >
                               {favoriteTab === "official"
-                                ? "공식 장소 즐겨찾기가 없습니다"
-                                : "사용자 장소 즐겨찾기가 없습니다"}
+                                ? "오픈 서울 즐겨찾기가 없습니다"
+                                : "현장 피드 즐겨찾기가 없습니다"}
                             </div>
                           )
                         ) : (
@@ -1805,7 +1805,7 @@ export default function Map() {
                     transition: "all 0.2s ease",
                   }}
                 >
-                  공식 장소
+                  오픈 서울
                 </button>
                 <button
                   onClick={() => {
@@ -1832,7 +1832,7 @@ export default function Map() {
                     transition: "all 0.2s ease",
                   }}
                 >
-                  사용자 장소
+                  현장 피드
                 </button>
               </div>
 
