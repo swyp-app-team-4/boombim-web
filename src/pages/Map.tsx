@@ -620,7 +620,7 @@ export default function Map() {
                 </defs>
                 <circle cx="${radius}" cy="${radius}" r="${
                 radius - 8
-              }" fill="${clusterColor}" opacity="1.0"/>
+              }" fill="${clusterColor}" opacity="0.6"/>
                 <text x="${radius}" y="${
                 radius + 4
               }" text-anchor="middle" fill="black" font-family="Arial, sans-serif" font-size="${Math.max(
@@ -800,7 +800,7 @@ export default function Map() {
                 </defs>
                 <circle cx="${radius}" cy="${radius}" r="${
                 radius - 8
-              }" fill="${clusterColor}" opacity="1.0"/>
+              }" fill="${clusterColor}" opacity="0.6"/>
                 <text x="${radius}" y="${
                 radius + 4
               }" text-anchor="middle" fill="black" font-family="Arial, sans-serif" font-size="${Math.max(
