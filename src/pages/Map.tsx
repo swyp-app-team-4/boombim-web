@@ -538,7 +538,7 @@ export default function Map() {
             console.log(
               "클러스터링 적용 API 호출 - /web/public/official-place"
             );
-            res = await api.post("/web/public/official-place", payload);
+            res = await api.post("/web/public/jpa/official-places", payload);
           } else {
             // 클러스터링 미적용 API
             console.log(
@@ -716,7 +716,7 @@ export default function Map() {
             console.log(
               "지도 이동 - 클러스터링 적용 API 호출 - /web/public/official-place"
             );
-            res = await api.post("/web/public/official-place", payload);
+            res = await api.post("/web/public/jpa/official-places", payload);
           } else {
             // 클러스터링 미적용 API
             console.log(
