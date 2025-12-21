@@ -538,7 +538,7 @@ export default function Map() {
             console.log(
               "클러스터링 적용 API 호출 - /web/public/official-place"
             );
-            res = await api.post("/web/public/jpa/official-places", payload);
+            res = await api.post("/web/public/official-place", payload);
           } else {
             // 클러스터링 미적용 API
             console.log(
@@ -620,7 +620,7 @@ export default function Map() {
                 </defs>
                 <circle cx="${radius}" cy="${radius}" r="${
                 radius - 8
-              }" fill="${clusterColor}" opacity="0.6"/>
+              }" fill="${clusterColor}" opacity="0.8"/>
                 <text x="${radius}" y="${
                 radius + 4
               }" text-anchor="middle" fill="black" font-family="Arial, sans-serif" font-size="${Math.max(
@@ -716,7 +716,7 @@ export default function Map() {
             console.log(
               "지도 이동 - 클러스터링 적용 API 호출 - /web/public/official-place"
             );
-            res = await api.post("/web/public/jpa/official-places", payload);
+            res = await api.post("/web/public/official-place", payload);
           } else {
             // 클러스터링 미적용 API
             console.log(
@@ -800,7 +800,7 @@ export default function Map() {
                 </defs>
                 <circle cx="${radius}" cy="${radius}" r="${
                 radius - 8
-              }" fill="${clusterColor}" opacity="0.6"/>
+              }" fill="${clusterColor}" opacity="0.8"/>
                 <text x="${radius}" y="${
                 radius + 4
               }" text-anchor="middle" fill="black" font-family="Arial, sans-serif" font-size="${Math.max(
